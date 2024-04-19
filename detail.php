@@ -22,11 +22,11 @@ $values = "";
 if($status==false) {
   sql_error($stmt);
 }else{
-  $row = $stmt->fetch();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC); // PDO::FETCH_ASSOC を追加
 }
 
 //全データ取得
-$v  =  $stmt->fetch(); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
+$v  =  $row; // $stmt->fetch(); を $row に変更
 // $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 
 ?>
@@ -41,23 +41,23 @@ $v  =  $stmt->fetch(); //PDO::FETCH_ASSOC[カラム名のみで取得できる�
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アンケートフォーム</title>
- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>アンケートフォーム</title>
+  <link href="https://cdn.jsdelivr.net.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
    </head>
 <header class="">
         <?php include 'header.php'; ?>
     </header>
-
-<body>
 
 <!-- Main[Start] -->
 <form method="POST" action="update.php">
 <body class="bg-blue-100">
     <div class="max-w-md mx-auto ">
         <h1 class="text-3xl font-bold ms:mt-10 mt-20 mb-8">アンケート更新</h1>
-        <form id="surveyForm" method="POST" action="insert.php" class="space-y-4">
             <label class="flex flex-col">
                 <span>名前:</span>
                 <input type="text" name="name"  value="<?=$v["name"]?>" required 
@@ -72,10 +72,9 @@ $v  =  $stmt->fetch(); //PDO::FETCH_ASSOC[カラム名のみで取得できる�
                 <span>年齢:</span>
                 <select name="age" id="age" value="<?=$v["age"]?>" required
                     class="border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="20～39歳">20～39歳</option>
-                    <option value="40～59歳">40～59歳</option>
-                    <option value="60歳以上">60歳以上</option>
-
+                    <option value="20～39歳" <?php if($v["age"] == "20～39歳") echo "selected"; ?>>20～39歳</option>
+                    <option value="40～59歳" <?php if($v["age"] == "40～59歳") echo "selected"; ?>>40～59歳</option>
+                    <option value="60歳以上" <?php if($v["age"] == "60歳以上") echo "selected"; ?>>60歳以上</option>
                 </select>
             </label>
             <label class="flex flex-col">
@@ -83,11 +82,11 @@ $v  =  $stmt->fetch(); //PDO::FETCH_ASSOC[カラム名のみで取得できる�
                 <select id="satisfaction" name="satisfaction" value="<?=$v["satisfaction"]?>" required
                     class="border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">選択してください</option>
-                    <option value="5">5 (大変満足)</option>
-                    <option value="4">4 (満足)</option>
-                    <option value="3">3 (普通)</option>
-                    <option value="2">2 (やや不満)</option>
-                    <option value="1">1 (不満足)</option>
+                    <option value="5" <?php if($v["satisfaction"] == 5) echo "selected"; ?>>5 (大変満足)</option>
+                    <option value="4" <?php if($v["satisfaction"] == 4) echo "selected"; ?>>4 (満足)</option>
+                    <option value="3" <?php if($v["satisfaction"] == 3) echo "selected"; ?>>3 (普通)</option>
+                    <option value="2" <?php if($v["satisfaction"] == 2) echo "selected"; ?>>2 (やや不満)</option>
+                    <option value="1" <?php if($v["satisfaction"] == 1) echo "selected"; ?>>1 (不満足)</option>
                 </select>
             </label>
             <label class="flex flex-col">
@@ -98,27 +97,14 @@ $v  =  $stmt->fetch(); //PDO::FETCH_ASSOC[カラム名のみで取得できる�
             
             <input type="hidden" name="id" value="<?=$v["id"]?>" >
             <input type="submit" value="送信"
-                class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                class="mt-5 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </form>
     </div>
 
 <!-- Main[End] -->
-
-<script>
-    // 特定のIDに基づいてselect要素を選択
-    var ageValue = "<?=$v["age"]?>"; // PHPで取得した年齢の値を設定
-    var satisfactionValue = "<?=$v["satisfaction"]?>"; // PHPで取得した満足度の値を設定
-
-    // 年齢の値, 満足度の値に基づいて選択を設定
-    document.getElementById('age').value = ageValue;
-    document.getElementById('satisfaction').value = satisfactionValue;
-</script>
 
 </body>
 <footer class="mt-10" >
 <?php include 'footer.php'; ?>
 </footer>
 </html>
-
-
-
