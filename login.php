@@ -8,7 +8,7 @@
 </head>
 
 <body class="bg-blue-100 min-h-screen flex items-center justify-center">
-    <header class="text-center py-4 bg-blue-500 text-white w-full fixed top-0 z-10">ログイン画面</header>
+    <header class="text-center py-4 bg-blue-500 text-white w-full fixed top-0 z-10">ログイン画面<a href="index.php" class="text-black">(アンケート登録画面へ)</a></header>
 
     <!-- ログインフォーム -->
     <!-- lLOGINogin_act.php は認証処理用のPHPです。 -->
